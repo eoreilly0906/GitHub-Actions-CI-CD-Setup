@@ -35,7 +35,7 @@ The CI/CD pipeline consists of two main workflows:
 
 1. Clone the repository
 2. Install dependencies: `npm install`
-3. Start development server: `npm run develop`
+3. Start development server: `npm run start:dev`
 4. Run tests: `npm test`
 
 ## Project Structure
@@ -45,4 +45,16 @@ The CI/CD pipeline consists of two main workflows:
 - `.github/workflows/`: GitHub Actions workflow configurations
 - `render.yaml`: Render deployment configuration
 
+
 TEST
+
+## Development Workflow
+
+1. Create feature branch from develop
+2. Make changes and commit
+3. Create pull request to develop
+4. Wait for GitHub Actions tests to pass
+5. Merge to develop
+6. Create pull request from develop to main
+7. After merge to main, automatic deployment to Render occurs
+

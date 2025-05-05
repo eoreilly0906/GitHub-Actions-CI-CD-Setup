@@ -32,5 +32,18 @@ jobs:
           exit 1
         fi
         
-        curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}" \
-          --fail 
+        echo "Triggering deployment..."
+        RESPONSE=$(curl -s -w "\n%{http_code}" -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}")
+        HTTP_CODE=$(echo "$RESPONSE" | tail -n1)
+        RESPONSE_BODY=$(echo "$RESPONSE" | sed '$d')
+        
+        echo "Response code: $HTTP_CODE"
+        echo "Response body: $RESPONSE_BODY"
+        
+        if [ "$HTTP_CODE" -ge 200 ] && [ "$HTTP_CODE" -lt 300 ]; then
+          echo "Deployment triggered successfully!"
+        else
+          echo "Error: Deployment trigger failed with status code $HTTP_CODE"
+          echo "$RESPONSE_BODY"
+          exit 1
+        fi 

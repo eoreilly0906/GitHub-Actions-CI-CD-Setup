@@ -25,7 +25,23 @@ jobs:
     
     - name: Deploy to Render
       run: |
-        curl -X POST "https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys" \
+        echo "Starting Render deployment..."
+        echo "Service ID: ${{ secrets.RENDER_SERVICE_ID }}"
+        
+        if [ -z "${{ secrets.RENDER_SERVICE_ID }}" ]; then
+          echo "Error: RENDER_SERVICE_ID is not set"
+          exit 1
+        fi
+        
+        if [ -z "${{ secrets.RENDER_API_KEY }}" ]; then
+          echo "Error: RENDER_API_KEY is not set"
+          exit 1
+        fi
+        
+        DEPLOY_URL="https://api.render.com/v1/services/${{ secrets.RENDER_SERVICE_ID }}/deploys"
+        echo "Deploy URL: $DEPLOY_URL"
+        
+        curl -v -X POST "$DEPLOY_URL" \
           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
           -H "Content-Type: application/json" \
           -d '{"clearCache": "do"}' \
